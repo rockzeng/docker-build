@@ -25,7 +25,7 @@ public class MainTest {
 
     @Before
     public void setUp() throws IOException {
-        //httpServer = Main.startServer();
+        httpServer = Main.startServer();
         Client c = Client.create();
         r = c.resource(getBaseURI());
     }
