@@ -19,10 +19,10 @@ public class Configuration {
     @Path("/{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Result getIt( @PathParam(value = "key") String key) throws IOException {
-    	
-    	
     	MemcachedConfig config = new MemcachedConfig();
     	String url = config.getUrl();
-        return new Result();
+    	Result result = new Result();
+    	result.setUrl(url);
+    	return result;
     }
 }
