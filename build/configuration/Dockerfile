@@ -13,4 +13,4 @@ RUN ["cp", "-rf", "docker-build-master/configuration/pom.xml", "/code/pom.xml"]
 RUN ["mvn", "clean", "install", "package"]
 EXPOSE 9998
 
-CMD ["java", "-jar", /code/target/rest-config-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/code/target/rest-config-1.0-SNAPSHOT.jar"]
