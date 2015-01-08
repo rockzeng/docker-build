@@ -47,6 +47,6 @@ public class MainTest {
     }
     
     private static URI getBaseURI() {
-        return UriBuilder.fromUri("http://192.168.56.101/").port(9998).build();
+        return UriBuilder.fromUri("http://0.0.0.0/").port(9998).build();
     }
 }
