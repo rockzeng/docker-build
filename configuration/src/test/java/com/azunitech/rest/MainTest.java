@@ -2,6 +2,9 @@
 package com.azunitech.rest;
 
 import java.io.IOException;
+import java.net.URI;
+
+import javax.ws.rs.core.UriBuilder;
 
 import org.apache.log4j.Logger;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -22,9 +25,9 @@ public class MainTest {
 
     @Before
     public void setUp() throws IOException {
-        httpServer = Main.startServer();
+        //httpServer = Main.startServer();
         Client c = Client.create();
-        r = c.resource(Main.BASE_URI);
+        r = c.resource(getBaseURI());
     }
 
     @After
@@ -41,5 +44,9 @@ public class MainTest {
     public void testApplicationWadl() {
         String serviceWadl = r.path("application.wadl").accept(MediaTypes.WADL).get(String.class);
         Assert.assertTrue(serviceWadl.length() > 0);
+    }
+    
+    private static URI getBaseURI() {
+        return UriBuilder.fromUri("http://192.168.56.101/").port(9998).build();
     }
 }

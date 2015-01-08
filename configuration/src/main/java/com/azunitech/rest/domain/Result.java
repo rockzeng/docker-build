@@ -20,4 +20,10 @@ public class Result {
 	public void setUrl( String url ){
 		this.url = url;
 	}
+	
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("url: ").append(this.url);
+		return buffer.toString();
+	}
 }
