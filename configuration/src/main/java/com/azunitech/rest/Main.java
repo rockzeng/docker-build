@@ -13,12 +13,15 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 public class Main {
 	private static final Logger s_logger = Logger.getLogger(Main.class);
     private static int getPort(int defaultPort) {
-        String httpPort = System.getProperty("jersey.server.port");
+        String httpPort = System.getProperty(REST.JERSEY_SERVER_PORT);
         if (null != httpPort) {
             try {
                 return Integer.parseInt(httpPort);
@@ -40,16 +43,22 @@ public class Main {
         ResourceConfig resourceConfig = new PackagesResourceConfig("com.azunitech.rest");
 
         s_logger.info("Starting grizzly2...");
-        return GrizzlyServerFactory.createHttpServer(BASE_URI, resourceConfig);
+        HttpServer httpServer = GrizzlyServerFactory.createHttpServer(BASE_URI, resourceConfig);
+        httpServer.getServerConfiguration().setJmxEnabled(true); 
+        return httpServer;
     }
     
     public static void main(String[] args) throws IOException {
-        HttpServer httpServer = startServer();
-        String httpPort = System.getProperty("jersey.admin.port");
+    	s_logger.debug(args);
+    	printEnvironmentVariable();
+    	HttpServer httpServer = startServer();
+        	
+        String httpPort = System.getProperty(REST.JERSEY_ADMIN_PORT);
         if (null == httpPort) {
         	httpPort = "9997";
         }
         
+        //Admin Server socker
         ServerSocket socket = new ServerSocket( Integer.parseInt(httpPort));
         Map<String, Command>  commands = getExecutableCommand(httpServer);
         HelpCommand help = new HelpCommand(httpServer);
@@ -57,6 +66,18 @@ public class Main {
     	RestServer s = getRestServer(socket, help);
     	s.start();
     }  
+    
+    private static void printEnvironmentVariable(){
+    	String[] set = new String[]{REST.JERSEY_ADMIN_PORT, REST.JERSEY_SERVER_PORT};
+    	List<String> setList = new ArrayList<String>(Arrays.asList(set)); 
+    	Map<String, String> env = System.getenv();
+        for (String envName : env.keySet()) {
+        	if ( setList.contains(envName)){
+        		System.setProperty(envName, env.get(envName));
+        		s_logger.info(String.format("%s=%s%n", envName, env.get(envName)));
+        	}
+        }
+    }
     
     private static Map<String, Command> getExecutableCommand(HttpServer svr){
     	Map<String, Command> map = new HashMap<String, Command>();
