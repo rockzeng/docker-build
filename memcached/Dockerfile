@@ -2,7 +2,7 @@ FROM ubuntu:14.04.1
 
 MAINTAINER Bill Li "billgql@hotmail.com"
 
-ENV http_proxy http://mz8xks:AZUnitech89645@144.72.231.18:80
+#ENV http_proxy http://mz8xks:AZUnitech89645@144.72.231.18:80
 
 # Update apt sources
 
